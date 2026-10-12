@@ -1,2 +1,4 @@
-dist/
+out/
 node_modules/
+logs/
+run_*.log

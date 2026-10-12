@@ -32,6 +32,7 @@ jobs:
         env:
           DOMAIN: ${{ github.event.inputs.domain || 'priv.email' }}
           ATTEMPTS: ${{ github.event.inputs.attempts || '1' }}
+          MAIL_API_TOKEN: ${{ secrets.MAIL_API_TOKEN }}
         run: |
           mkdir -p out logs
           N=$((ATTEMPTS)); [ "$N" -gt 3 ] && N=3
@@ -42,13 +43,12 @@ jobs:
             rc=$?
             echo "attempt $i exit=$rc"
             tail -5 "logs/att$i.log"
-            # stop early on full success (api key minted)
             if ls "$ATTEMPT_OUT"/zai-*.json >/dev/null 2>&1 && grep -q '"api_key_minted": true' "$ATTEMPT_OUT"/zai-*.json; then
               echo "attempt $i fully succeeded (api key) — stopping"
               break
             fi
           done
-          exit 0   # never fail the job — partial creds still commit
+          exit 0
 
       - name: Commit creds (git is disk)
         if: always()
