@@ -1,0 +1,74 @@
+name: zai-signup
+on:
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: 'email domain (priv.email | v3-mail.priv.email)'
+        required: false
+        default: 'priv.email'
+      attempts:
+        description: 'signup attempts this run (max 3 — per-IP captcha budget)'
+        required: false
+        default: '1'
+
+jobs:
+  signup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install chromium + deps
+        run: |
+          cd runner
+          npm install
+          npx playwright install chromium --with-deps
+
+      - name: Run z.ai signup attempts (fresh IP)
+        env:
+          DOMAIN: ${{ github.event.inputs.domain || 'priv.email' }}
+          ATTEMPTS: ${{ github.event.inputs.attempts || '1' }}
+        run: |
+          mkdir -p out logs
+          N=$((ATTEMPTS)); [ "$N" -gt 3 ] && N=3
+          for i in $(seq 1 "$N"); do
+            echo "=== attempt $i/$N ==="
+            ATTEMPT_OUT="out/att$i"; mkdir -p "$ATTEMPT_OUT"
+            ( cd runner && node zai_signup_gha.js --email-domain "$DOMAIN" --outdir "../$ATTEMPT_OUT" ) > "logs/att$i.log" 2>&1
+            rc=$?
+            echo "attempt $i exit=$rc"
+            tail -5 "logs/att$i.log"
+            # stop early on full success (api key minted)
+            if ls "$ATTEMPT_OUT"/zai-*.json >/dev/null 2>&1 && grep -q '"api_key_minted": true' "$ATTEMPT_OUT"/zai-*.json; then
+              echo "attempt $i fully succeeded (api key) — stopping"
+              break
+            fi
+          done
+          exit 0   # never fail the job — partial creds still commit
+
+      - name: Commit creds (git is disk)
+        if: always()
+        run: |
+          git config user.name "zai-runner-bot"
+          git config user.email "zai-runner@users.noreply.github.com"
+          mkdir -p creds runs
+          find out -name 'zai-*.json' -exec cp {} creds/ \; 2>/dev/null || true
+          find out -name 'api_log_final.json' -exec cp {} "runs/api_log_att$(date +%s).json" \; 2>/dev/null || true
+          cp logs/*.log runs/ 2>/dev/null || true
+          git add creds runs
+          git diff --cached --quiet || git commit -m "run: zai signup $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: run-artifacts
+          path: |
+            out/
+            logs/
+          if-no-files-found: ignore
+          retention-days: 30
