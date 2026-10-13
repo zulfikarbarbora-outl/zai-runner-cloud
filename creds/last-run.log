@@ -1,8 +1,8 @@
-[05:13:29][start] domain=priv.email outdir=/tmp/zaiout ip-check...
-[05:13:29][ip] 18.221.159.228
-[05:13:29][id] email=zs-1791868409-9c74e3@priv.email password=Zkehd9ky!K01
-[05:13:30][launch] browserType.launch: Executable doesn't exist at /opt/buildhome/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome
-[05:13:30][launch] browserType.launch: Executable doesn't exist at /opt/buildhome/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell
+[05:13:43][start] domain=priv.email outdir=/tmp/zaiout ip-check...
+[05:13:43][ip] 18.224.93.9
+[05:13:43][id] email=zs-1791868423-b1d661@priv.email password=Zkiaqyhx!RL0
+[05:13:43][launch] browserType.launch: Executable doesn't exist at /opt/buildhome/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome
+[05:13:43][launch] browserType.launch: Executable doesn't exist at /opt/buildhome/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell
 /opt/build/repo/runner/_solver_core.js:21
   throw new Error('all launch modes failed');
         ^
