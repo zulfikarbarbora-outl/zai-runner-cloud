@@ -1,0 +1,14 @@
+[05:13:15][start] domain=priv.email outdir=/tmp/zaiout ip-check...
+[05:13:15][ip] 3.137.138.203
+[05:13:15][id] email=zs-1791868395-976612@priv.email password=Zkis720x!8Y7
+[05:13:15][launch] browserType.launch: Executable doesn't exist at /opt/buildhome/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome
+[05:13:15][launch] browserType.launch: Executable doesn't exist at /opt/buildhome/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell
+/opt/build/repo/runner/_solver_core.js:21
+  throw new Error('all launch modes failed');
+        ^
+
+Error: all launch modes failed
+    at launchLocal [90m(/opt/build/repo/runner/[39m_solver_core.js:21:9[90m)[39m
+    at async [90m/opt/build/repo/runner/[39mzai_signup_gha.js:152:19
+
+Node.js v22.23.3
