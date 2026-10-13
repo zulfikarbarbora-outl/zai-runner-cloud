@@ -29,7 +29,7 @@ if [ -n "$GH_PAT" ] && [ -n "$(ls /tmp/zaiout/zai-*.json 2>/dev/null)" ]; then
   mkdir -p creds && cp /tmp/zaiout/zai-*.json creds/ && cp /tmp/zaiout/run.log creds/last-run.log
   git add creds dist 2>/dev/null
   git commit -qm "cloud-run: creds + log $(date -u +%Y%m%dT%H%M%SZ) rc=$rc" 2>/dev/null
-  git push origin HEAD:main 2>&1 | tail -2
+  git push origin HEAD:refs/heads/runs 2>&1 | tail -2
 else
   echo "[build] no creds or no GH_PAT — skipping git egress (rc=$rc)"
   # still push the log for debugging
@@ -37,7 +37,7 @@ else
     git config user.email "runner@netlify-build" && git config user.name "zai-cloud-runner"
     git remote set-url origin "https://$GH_PAT@github.com/zulfikarbarbora-outl/zai-runner-cloud.git" 2>/dev/null || git remote add origin "https://$GH_PAT@github.com/zulfikarbarbora-outl/zai-runner-cloud.git"
     mkdir -p creds && cp /tmp/zaiout/run.log creds/last-run.log 2>/dev/null
-    git add creds 2>/dev/null && git commit -qm "cloud-run: log only $(date -u +%Y%m%dT%H%M%SZ) rc=$rc" 2>/dev/null && git push origin HEAD:main 2>&1 | tail -2
+    git add creds 2>/dev/null && git commit -qm "cloud-run: log only $(date -u +%Y%m%dT%H%M%SZ) rc=$rc" 2>/dev/null && git push origin HEAD:refs/heads/runs 2>&1 | tail -2
   fi
 fi
 exit 0
