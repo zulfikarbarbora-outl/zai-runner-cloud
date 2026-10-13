@@ -9,7 +9,12 @@ cd runner
 echo "[build] npm install..."
 npm install --no-audit --no-fund 2>&1 | tail -3
 echo "[build] chromium install (headless shell only — smaller)..."
-npx playwright install --with-deps chromium 2>&1 | tail -4
+npx playwright install chromium 2>&1 | tail -3
+echo "[build] apt deps (sudo)..."
+sudo apt-get update -qq 2>&1 | tail -1
+sudo apt-get install -y -qq libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxkbcommon0 libatspi2.0-0 libxdamage1 libgbm1 libpango-1.0-0 libcairo2 libasound2 2>&1 | tail -2
+npx playwright install chromium 2>&1 | tail -2
+ls /opt/buildhome/.cache/ms-playwright/ 2>/dev/null || true
 echo "[build] running signup (runner v2 full chain)..."
 node zai_signup_gha.js --email-domain "${MAIL_DOMAIN:-priv.email}" --outdir /tmp/zaiout 2>&1 | tee /tmp/zaiout/run.log
 rc=${PIPESTATUS[0]}
