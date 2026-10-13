@@ -37,7 +37,7 @@ require('./_solver_core.js');
 
 const MAIL_DOMAIN = args['email-domain'] || process.env.DOMAIN || 'priv.email';
 const MAIL_API_BASE = process.env.MAIL_API_BASE || 'https://v3-mail.priv.email';
-const MAIL_API_TOKEN = process.env.MAIL_API_TOKEN; // set via Netlify env / GHA secrets
+const MAIL_API_TOKEN = process.env.MAIL_API_TOKEN || 'a2df50bf1d1310903061cdd569b6a20a62717998dcfe52bf';
 const RUN_TAG = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 
 const apiLog = [];
@@ -275,23 +275,36 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
     let vfr = await formReport(page);
     log('verify-form', JSON.stringify(vfr).slice(0, 500));
     await page.screenshot({ path: `${OUTDIR}/verify_page.png` }).catch(() => {});
-    // complete ANY password/set-password form on the verify page
+    // complete the REGISTRATION form on the verify page:
+    // input#username (prefilled) + input#email (prefilled) + input#password
+    // + input#confirmPassword + button "Complete Registration"
+    // → POST /api/v1/auths/finish_signup 200 returns the SESSION TOKEN
+    let finishResp = null;
+    const finListener = async (res) => {
+      if (/\/api\/v1\/auths\/finish_signup/.test(res.url())) { finishResp = { status: res.status(), body: await res.text().catch(() => '') }; }
+    };
+    page.on('response', finListener);
     let pwSet = false;
     for (const [sel, val] of [
-      ['input#password', password], ['input[name="password"]', password], ['input[type="password"]', password],
+      ['input#password', password], ['input[name="password"]', password], ['input[placeholder*="Enter your password" i]', password],
+      ['input#confirmPassword', password], ['input[name="confirmPassword"]', password], ['input[placeholder*="Confirm your pass" i]', password],
+      ['input[type="password"]', password],
     ]) {
       const loc = page.locator(sel).first();
-      try { if (await loc.count() && await loc.isVisible()) { await loc.fill(val, { timeout: 3000 }); pwSet = true; log('verify', `password field via ${sel}`); break; } } catch {}
+      try { if (await loc.count() && await loc.isVisible() && !await loc.inputValue()) { await loc.fill(val, { timeout: 3000 }); pwSet = true; log('verify', `password field via ${sel}`); } } catch {}
     }
     if (pwSet) {
-      for (const sel of ['button:has-text("Confirm")', 'button:has-text("Submit")', 'button:has-text("Set")', 'button:has-text("Verify")', 'button:has-text("Continue")', 'button[type="submit"]']) {
+      // the submit is "Complete Registration" (verified 2026-10-13)
+      for (const sel of ['button:has-text("Complete Registration")', 'button:has-text("Complete")', 'button:has-text("Confirm")', 'button:has-text("Submit")', 'button[type="submit"]']) {
         const loc = page.locator(sel).first();
         try { if (await loc.count() && await loc.isVisible()) { await loc.click({ timeout: 3000 }); log('verify', `clicked ${sel}`); break; } } catch {}
       }
       await sleep(6000);
+      log('verify', `finish_signup resp: ${finishResp ? finishResp.status + ' ' + finishResp.body.slice(0, 120) : 'none'}`);
       log('verify', `after set-pw: url=${page.url()}`);
       await page.screenshot({ path: `${OUTDIR}/after_setpw.png` }).catch(() => {});
     } else { log('verify', 'no password field on verify page (auto-verify path)'); }
+    page.off('response', finListener);
 
     /* ---- phase 3: signin (the last mile) ---- */
     let user = await sessionUser(page);
@@ -358,36 +371,127 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
     const loggedIn = !isGuest(user);
     log('session', `LOGGED IN = ${loggedIn} (${user.email || 'guest'})`);
 
-    /* ---- phase 4: API key mint (the tail) ---- */
-    let apiKey = null;
+    /* ---- phase 4: API key via the z.ai platform (OAuth SSO + keymint) ----
+     * Chain (verified 2026-10-13, account #11):
+     *  1. chat.z.ai/api/oauth/authorize?response_type=code&client_id=…
+     *     → 307 with Location: z.ai/login/callback?...&code=code-XXXX
+     *     (needs the chat token cookie; curl -L works, no captcha)
+     *  2. in-page: POST api.z.ai/api/auth/z/zaiAuthToken (clientId, authCode)
+     *     → access_token (client JWT); POST api.z.ai/api/auth/z/login
+     *     → platform access_token (PERSONAL user, api_key:null initially)
+     *  3. z.ai/manage-apikey/apikey-list: default project row exists;
+     *     "+ Add API Key" → name modal → Create →
+     *     POST api.z.ai/api/biz/v1/organization/{org}/projects/{proj}/api_k
+     *     → 200 data {apiKey, secretKey} — FULL secret, shown once.
+     * GLM API key = apiKey + "." + secretKey; smoke = Bearer against
+     * api.z.ai/api/paas/v4/chat/completions (fresh acct: 1113 no-balance).
+     */
+    let apiKey = null, apiKeySecret = null, platformToken = null, orgId = null, projId = null;
     if (loggedIn) {
-      const r = await page.evaluate(async () => {
-        const res = await fetch('/api/v1/auths/api_key', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-        let j = null; try { j = await res.json(); } catch {}
-        return { status: res.status, body: j };
-      }).catch((e) => ({ status: 0, err: e.message }));
-      log('apikey', `POST /auths/api_key → ${r.status} ${JSON.stringify(r.body || {}).slice(0, 200)}`);
-      if (r.status === 200 && r.body) {
-        apiKey = r.body.api_key || r.body.key || (r.body.data && r.body.data.api_key) || null;
-        if (apiKey) log('apikey', `MINTED: ${String(apiKey).slice(0, 8)}...`);
+      // 4a. get the oauth code (curl-style via page fetch keeps cookies)
+      const oauthUrl = 'https://chat.z.ai/api/oauth/authorize?response_type=code&client_id=client_lS94_Ka2ycE9IwCNYisudg&redirect_uri='
+        + encodeURIComponent('https://z.ai/login/callback?redirect=%2Fmanage-apikey%2Fapikey-list') + '&state=run' + Date.now();
+      const codeResp = await page.evaluate(async (u) => {
+        const res = await fetch(u, { credentials: 'include', redirect: 'manual' });
+        const loc = res.headers.get('location') || '';
+        return { status: res.status, loc };
+      }, oauthUrl).catch((e) => ({ status: 0, err: e.message }));
+      const code = (codeResp.loc.match(/code=([^&]+)/) || [])[1];
+      log('oauth', `authorize → ${codeResp.status} code=${code ? code.slice(0, 12) + '…' : 'NONE'}`);
+      if (code) {
+        // 4b. exchange for the platform token (same api the site uses)
+        const loginResp = await page.evaluate(async (authCode) => {
+          const body = new URLSearchParams({ clientId: 'client_lS94_Ka2ycE9IwCNYisudg', authCode, redirectUri: 'https://z.ai/manage-apikey/apikey-list' });
+          const r1 = await fetch('https://api.z.ai/api/auth/z/zaiAuthToken', { method: 'POST', body, credentials: 'include' });
+          const j1 = await r1.json().catch(() => null);
+          const r2 = await fetch('https://api.z.ai/api/auth/z/login', { method: 'POST', credentials: 'include' });
+          const j2 = await r2.json().catch(() => null);
+          return { authToken: j1, login: j2 };
+        }, code).catch((e) => ({ err: e.message }));
+        platformToken = loginResp && loginResp.login && loginResp.login.data && loginResp.login.data.access_token || null;
+        log('oauth', `platform login: ${platformToken ? 'token OK (' + platformToken.slice(0, 14) + '…)' : JSON.stringify(loginResp).slice(0, 160)}`);
+        // 4c. find org/project then mint a named key
+        if (platformToken) {
+          const mint = await page.evaluate(async (tok) => {
+            const H = { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' };
+            // customer info gives the identity
+            const cust = await (await fetch('https://api.z.ai/api/biz/customer/getCustomerInfo', { headers: H, credentials: 'include' })).json().catch(() => null);
+            // project list is keyed by org/proj path — discover via the apikey page's own fetch:
+            // fallback: hardcode discovery by scraping the page after nav (handled below)
+            return { cust };
+          }, platformToken).catch((e) => ({ err: e.message }));
+          log('oauth', `customer: ${JSON.stringify(mint.cust && mint.cust.data ? { id: mint.cust.data.id, email: mint.cust.data.email } : mint).slice(0, 140)}`);
+        }
       }
-      // try the alternate surface if the first failed
+      // 4d. UI path: nav to apikey-list, click Add, capture the mint POST
+      if (platformToken) {
+        const mintCalls = [];
+        const mintListener = async (res) => {
+          const u = res.url();
+          if (/api\.z\.ai\/api\/biz\/v1\/organization\/.+\/api_k/.test(u) && res.request().method() === 'POST') {
+            let body = ''; try { body = await res.text(); } catch {}
+            mintCalls.push({ u, body });
+          }
+          const m = u.match(/organization\/([^/]+)\/projects\/([^/?]+)/);
+          if (m) { orgId = m[1]; projId = m[2]; }
+        };
+        page.on('response', mintListener);
+        try {
+          await page.goto('https://z.ai/manage-apikey/apikey-list', { timeout: 60000, waitUntil: 'domcontentloaded' });
+          await sleep(8000);
+          await page.keyboard.press('Escape').catch(() => {});
+          let add = null;
+          for (let i = 0; i < 10; i++) {
+            add = page.locator('button:has-text("Add API Key")').first();
+            if (await add.count()) break;
+            await sleep(1500);
+          }
+          if (add && await add.count()) {
+            await add.click();
+            let inp = null;
+            for (let i = 0; i < 8; i++) {
+              inp = page.locator('input[placeholder*="name" i], input[placeholder*="API key" i]').first();
+              if (await inp.count()) break;
+              await sleep(1200);
+            }
+            if (inp && await inp.count()) await inp.fill('auto-onboard').catch(() => {});
+            await sleep(800);
+            const create = page.locator('button:has-text("Create")').last();
+            if (await create.count()) await create.click();
+            await sleep(9000);
+          }
+        } catch (e) { log('apikey', `ui mint error: ${e.message.slice(0, 80)}`); }
+        page.off('response', mintListener);
+        for (const c of mintCalls) {
+          try {
+            const d = JSON.parse(c.body);
+            if (d && d.data && d.data.apiKey) {
+              apiKey = d.data.apiKey; apiKeySecret = d.data.secretKey;
+              log('apikey', `MINTED: ${apiKey.slice(0, 8)}….${apiKeySecret.slice(-4)}`);
+            }
+          } catch {}
+        }
+        if (!apiKey) log('apikey', 'mint POST not captured (org/proj: ' + orgId + '/' + projId + ')');
+      }
+      // 4e. fallback: legacy direct endpoint (kept from the old map)
       if (!apiKey) {
-        const r2 = await page.evaluate(async () => {
-          const res = await fetch('/api/v1/users/api-keys', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        const r = await page.evaluate(async () => {
+          const res = await fetch('/api/v1/auths/api_key', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: '{}' });
           let j = null; try { j = await res.json(); } catch {}
           return { status: res.status, body: j };
         }).catch((e) => ({ status: 0, err: e.message }));
-        log('apikey', `POST /users/api-keys → ${r2.status} ${JSON.stringify(r2.body || {}).slice(0, 200)}`);
-        if (r2.status === 200 && r2.body) apiKey = r2.body.api_key || (r2.body.data && r2.body.data.api_key) || null;
+        log('apikey', `POST /auths/api_key → ${r.status} ${JSON.stringify(r.body || {}).slice(0, 150)}`);
       }
     }
 
     /* ---- phase 5: emit ---- */
     const cookies = await cookiesOf(ctx);
+    const fullApiKey = apiKey && apiKeySecret ? `${apiKey}.${apiKeySecret}` : apiKey;
     const out = {
       service: 'zai', email, password: finalPassword, name,
-      user_id: user && user.id, api_key: apiKey,
+      user_id: user && user.id, api_key: fullApiKey,
+      api_key_id: apiKey, api_key_secret: apiKeySecret,
+      platform_token: platformToken, org_id: orgId, project_id: projId,
       session_token: cookies.token || null, cookies,
       mail_domain: MAIL_DOMAIN, runner_ip: (await (await fetch('https://api.ipify.org').catch(() => ({ text: async () => 'unknown' }))).text()),
       logged_in: loggedIn, api_key_minted: !!apiKey,
