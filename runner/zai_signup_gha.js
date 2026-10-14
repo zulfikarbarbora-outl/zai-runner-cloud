@@ -177,7 +177,7 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
     // captcha round 1 on the login-mode form
     let started = await clickFirst(page,
       ['text=Click to start verification', 'button:has-text("Click to start verification")', '#aliyunCaptcha-captcha-text'], 'widget start');
-    if (!started) { await browser.close(); process.exit(4); }
+    if (!started) { try { await browser.close(); } catch (_) {} process.exit(4); }
     for (let i = 0; i < 15; i++) {
       const ready = await page.evaluate(() => {
         const img = document.querySelector('#aliyunCaptcha-img');
@@ -187,7 +187,7 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
       if (ready) break;
       await sleep(2000);
     }
-    if (!await solveWidget(page)) { await browser.close(); process.exit(5); }
+    if (!await solveWidget(page)) { try { await browser.close(); } catch (_) {} process.exit(5); }
 
     // "Sign up" morphs the form (Name appears, email/pw carry, captcha resets)
     await sleep(1200);
@@ -230,7 +230,7 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
       }
       round2Solved = await solveWidget(page);
       log('captcha', `round 2 solved=${round2Solved}`);
-      if (!round2Solved) { await browser.close(); process.exit(5); }
+      if (!round2Solved) { try { await browser.close(); } catch (_) {} process.exit(5); }
     } else {
       // widget may already be verified (rare) — verify by popup absence
       const st = await popupState(page);
@@ -269,7 +269,7 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
     /* ---- phase 2: verify + SET PASSWORD (the #9 lesson) ---- */
     const { link, subject } = await pollMailLink(email, 180000, /z\.ai|zai|verify|password|reset/i);
     log('mail', `link: ${link ? link.slice(0, 90) : 'NONE (' + subject + ')'}`);
-    if (!link) { await browser.close(); process.exit(6); }
+    if (!link) { try { await browser.close(); } catch (_) {} process.exit(6); }
     await page.goto(link, { timeout: 60000, waitUntil: 'domcontentloaded' });
     await sleep(3500);
     let vfr = await formReport(page);
