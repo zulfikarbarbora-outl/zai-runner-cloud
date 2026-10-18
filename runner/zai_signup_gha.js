@@ -138,13 +138,67 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
   return clicked;
 }
 
+/* ---------------- watchdog (SKILL §15 + §8.8.2 #3) ----------------
+ * A dropped CDP connection leaves every pending promise hanging and the
+ * node event loop DRAINS → process exits 0 silently mid-flow. A
+ * setInterval watchdog (keeps the loop alive + stall-exit) is MANDATORY.
+ * The pattern is from scripts/warm_browser.js startWatchdog().
+ *
+ * ALSO: a global unhandledRejection handler — without it, ANY promise
+ * rejection that escapes the try/catch (e.g., a CDP drop in the middle
+ * of `await page.screenshot()` inside solveWidget's captcha loop) kills
+ * the process silently with exit 0 and NO log. The handler writes a
+ * rejection_exit.json so the next session can see WHY the process died.
+ */
+function _writeExitArtifact(name, payload) {
+  try { fs.writeFileSync(`${OUTDIR}/${name}`, JSON.stringify(payload, null, 2)); } catch {}
+}
+process.on('unhandledRejection', (reason, p) => {
+  log('FATAL', `unhandledRejection: ${String(reason && reason.message || reason).slice(0, 200)}`);
+  _writeExitArtifact('rejection_exit.json', {
+    reason: String(reason && reason.message || reason).slice(0, 500),
+    stack: (reason && reason.stack || '').slice(0, 1500),
+    exited: new Date().toISOString(),
+  });
+  process.exit(3);
+});
+process.on('uncaughtException', (err) => {
+  log('FATAL', `uncaughtException: ${String(err.message).slice(0, 200)}`);
+  _writeExitArtifact('uncaught_exit.json', {
+    message: String(err.message).slice(0, 500),
+    stack: (err.stack || '').slice(0, 1500),
+    exited: new Date().toISOString(),
+  });
+  process.exit(4);
+});
+
+function startWatchdog(stallMs = 180000, pollMs = 10000) {
+  let last = Date.now();
+  const timer = setInterval(() => {
+    if (Date.now() - last > stallMs) {
+      log('watchdog', `no progress in ${Math.round(stallMs / 1000)}s — hard exit`);
+      try { fs.writeFileSync(`${OUTDIR}/watchdog_exit.json`, JSON.stringify({ reason: 'stall', stallMs, last_touch: new Date(last).toISOString(), exited: new Date().toISOString() }, null, 2)); } catch {}
+      process.exit(2);
+    }
+  }, pollMs);
+  return {
+    touch: (tag = '') => { last = Date.now(); if (tag) log('watchdog', `touch: ${tag}`); },
+    stop: () => clearInterval(timer),
+  };
+}
+
 /* ---------------- main ---------------- */
 (async () => {
   log('start', `domain=${MAIL_DOMAIN} outdir=${OUTDIR} ip-check...`);
+  const wd = startWatchdog(180000, 10000);  // 3min stall → hard exit (caps silent death)
   try { const r = await fetch('https://api.ipify.org'); log('ip', await r.text()); } catch {}
 
-  const email = `zs-${Math.floor(Date.now() / 1000)}-${Math.random().toString(16).slice(2, 8)}@${MAIL_DOMAIN}`;
-  const password = `Zk${Math.random().toString(36).slice(2, 8)}!${Math.random().toString(36).slice(2, 5).toUpperCase()}`;
+  // S25 fleet: --email injects the runner identity (firstlast##@domain);
+  // fallback keeps the legacy zs-<ts>-<hex> shape.
+  const email = (typeof args.email === 'string' && args.email.includes('@'))
+    ? args.email
+    : `zs-${Math.floor(Date.now() / 1000)}-${Math.random().toString(16).slice(2, 8)}@${MAIL_DOMAIN}`;
+  const password = process.env.ONBOARD_FLEET_PW || `Zk${Math.random().toString(36).slice(2, 8)}!${Math.random().toString(36).slice(2, 5).toUpperCase()}`;
   const name = 'Zed Walker';
   log('id', `email=${email} password=${password}`);
   fs.writeFileSync(`${OUTDIR}/identity.json`, JSON.stringify({ email, password, name, domain: MAIL_DOMAIN }, null, 2));
@@ -161,6 +215,7 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
     /* ---- phase 1: signup ---- */
     await page.goto('https://chat.z.ai/auth', { timeout: 60000, waitUntil: 'domcontentloaded' });
     for (let h = 0; h < 15; h++) { const n = await page.locator('button').count().catch(() => 0); if (n >= 2) break; await sleep(2000); }
+        wd.touch('nav');
     log('nav', `title="${await page.title()}"`);
 
     // login form → fill email+password (form starts in LOGIN mode)
@@ -177,7 +232,7 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
     // captcha round 1 on the login-mode form
     let started = await clickFirst(page,
       ['text=Click to start verification', 'button:has-text("Click to start verification")', '#aliyunCaptcha-captcha-text'], 'widget start');
-    if (!started) { try { await browser.close(); } catch (_) {} process.exit(4); }
+    if (!started) { browser.close().catch(() => {}); process.exit(4); }
     for (let i = 0; i < 15; i++) {
       const ready = await page.evaluate(() => {
         const img = document.querySelector('#aliyunCaptcha-img');
@@ -187,7 +242,7 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
       if (ready) break;
       await sleep(2000);
     }
-    if (!await solveWidget(page)) { try { await browser.close(); } catch (_) {} process.exit(5); }
+    if (!await solveWidget(page)) { browser.close().catch(() => {}); process.exit(5); }
 
     // "Sign up" morphs the form (Name appears, email/pw carry, captcha resets)
     await sleep(1200);
@@ -229,8 +284,9 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
         await sleep(2000);
       }
       round2Solved = await solveWidget(page);
-      log('captcha', `round 2 solved=${round2Solved}`);
-      if (!round2Solved) { try { await browser.close(); } catch (_) {} process.exit(5); }
+          wd.touch('captcha-r2');
+    log('captcha', `round 2 solved=${round2Solved}`);
+      if (!round2Solved) { browser.close().catch(() => {}); process.exit(5); }
     } else {
       // widget may already be verified (rare) — verify by popup absence
       const st = await popupState(page);
@@ -268,11 +324,13 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
 
     /* ---- phase 2: verify + SET PASSWORD (the #9 lesson) ---- */
     const { link, subject } = await pollMailLink(email, 180000, /z\.ai|zai|verify|password|reset/i);
+        wd.touch('mail-link');
     log('mail', `link: ${link ? link.slice(0, 90) : 'NONE (' + subject + ')'}`);
-    if (!link) { try { await browser.close(); } catch (_) {} process.exit(6); }
+    if (!link) { browser.close().catch(() => {}); process.exit(6); }
     await page.goto(link, { timeout: 60000, waitUntil: 'domcontentloaded' });
     await sleep(3500);
     let vfr = await formReport(page);
+        wd.touch('verify-form');
     log('verify-form', JSON.stringify(vfr).slice(0, 500));
     await page.screenshot({ path: `${OUTDIR}/verify_page.png` }).catch(() => {});
     // complete the REGISTRATION form on the verify page:
@@ -313,7 +371,8 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
       await page.goto('https://chat.z.ai/auth', { timeout: 60000, waitUntil: 'domcontentloaded' });
       await sleep(2500);
       const ok = await emailFormSubmit(page, { email, password, submitLabel: 'Sign in' });
-      log('signin', `flow ran=${ok}`);
+          wd.touch('signin');
+    log('signin', `flow ran=${ok}`);
       await sleep(4000);
       user = await sessionUser(page);
       log('session', `after signin: ${JSON.stringify(user)}`);
@@ -460,7 +519,8 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
             if (await create.count()) await create.click();
             await sleep(9000);
           }
-        } catch (e) { log('apikey', `ui mint error: ${e.message.slice(0, 80)}`); }
+        } catch (e) {     wd.touch('apikey');
+    log('apikey', `ui mint error: ${e.message.slice(0, 80)}`); }
         page.off('response', mintListener);
         for (const c of mintCalls) {
           try {
@@ -501,14 +561,31 @@ async function emailFormSubmit(page, { email, password, submitLabel }) {
     const outFile = path.join(OUTDIR, `zai-${RUN_TAG}.json`);
     fs.writeFileSync(outFile, JSON.stringify(out, null, 2));
     fs.writeFileSync(`${OUTDIR}/api_log_final.json`, JSON.stringify(apiLog, null, 2));
+        wd.touch('done');
     log('done', `CREDS → ${outFile} | logged_in=${loggedIn} api_key=${!!apiKey}`);
-    await browser.close();
+    wd.stop();
+    // Fire-and-forget browser.close() — on a dead CDP connection the promise
+    // HANGS forever (the catch only handles rejections, not hangs), which
+    // would block process.exit() and let the event loop drain to exit 0
+    // instead of the intended code. The OS reaps the chrome process anyway.
+    browser.close().catch(() => {});
     process.exit(loggedIn ? 0 : 8);
   } catch (e) {
     log('exception', (e.message || e).split('\n')[0]);
-    await page.screenshot({ path: `${OUTDIR}/exception.png` }).catch(() => {});
+    // Fire-and-forget the screenshot — on a closed page, page.screenshot()
+    // may HANG (not reject) and block process.exit() indefinitely. The OS
+    // doesn't care about a missed diagnostic screenshot.
+    page.screenshot({ path: `${OUTDIR}/exception.png` }).catch(() => {});
     fs.writeFileSync(`${OUTDIR}/api_log_final.json`, JSON.stringify(apiLog, null, 2));
-    await browser.close().catch(() => {});
+    _writeExitArtifact('exception_exit.json', {
+      message: String(e.message || e).slice(0, 500),
+      stack: (e.stack || '').slice(0, 1500),
+      exited: new Date().toISOString(),
+    });
+    wd.stop();
+    // Fire-and-forget browser.close() — see comment in success path above.
+    browser.close().catch(() => {});
+    log('exit', 'process.exit(7) about to fire');
     process.exit(7);
   }
 })();
