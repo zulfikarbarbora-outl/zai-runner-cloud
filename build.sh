@@ -27,22 +27,45 @@ done
 echo "<html><body><pre>$(head -c 30000 dist/run.log)</pre></body></html>" > dist/index.html
 
 # --- git egress: commit creds + log back to the repo (S22 design) ---
-if [ -n "$GH_PAT" ] && [ -n "$(ls /tmp/zaiout/zai-*.json 2>/dev/null)" ]; then
-  echo "[build] pushing creds via git..."
+# S26+: fetch existing runs branch first so the push is fast-forward
+# (the runs branch diverged from main after Oct 13; HEAD:runs is now
+# non-fast-forward and gets rejected. Fetch + commit-on-top fixes it.)
+egress_push() {
+  local label="$1"
+  if [ -z "$GH_PAT" ]; then
+    echo "[build] no GH_PAT — skipping git egress"
+    return
+  fi
   git config user.email "runner@netlify-build" && git config user.name "zai-cloud-runner"
   git remote set-url origin "https://$GH_PAT@github.com/zulfikarbarbora-outl/zai-runner-cloud.git" 2>/dev/null || git remote add origin "https://$GH_PAT@github.com/zulfikarbarbora-outl/zai-runner-cloud.git"
-  mkdir -p creds && cp /tmp/zaiout/zai-*.json creds/ && cp /tmp/zaiout/run.log creds/last-run.log
-  git add creds dist 2>/dev/null
-  git commit -qm "cloud-run: creds + log $(date -u +%Y%m%dT%H%M%SZ) rc=$rc" 2>/dev/null
-  git push origin HEAD:refs/heads/runs 2>&1 | tail -2
-else
-  echo "[build] no creds or no GH_PAT — skipping git egress (rc=$rc)"
-  # still push the log for debugging
-  if [ -n "$GH_PAT" ]; then
-    git config user.email "runner@netlify-build" && git config user.name "zai-cloud-runner"
-    git remote set-url origin "https://$GH_PAT@github.com/zulfikarbarbora-outl/zai-runner-cloud.git" 2>/dev/null || git remote add origin "https://$GH_PAT@github.com/zulfikarbarbora-outl/zai-runner-cloud.git"
-    mkdir -p creds && cp /tmp/zaiout/run.log creds/last-run.log 2>/dev/null
-    git add creds 2>/dev/null && git commit -qm "cloud-run: log only $(date -u +%Y%m%dT%H%M%SZ) rc=$rc" 2>/dev/null && git push origin HEAD:refs/heads/runs 2>&1 | tail -2
+  # fetch existing runs branch (if any) so we can commit on top
+  git fetch origin refs/heads/runs:refs/heads/runs 2>/dev/null || true
+  # stage the creds + log
+  mkdir -p creds
+  cp /tmp/zaiout/zai-*.json creds/ 2>/dev/null || true
+  cp /tmp/zaiout/run.log creds/last-run.log 2>/dev/null || true
+  # create the commit on the runs branch (checkout if exists, else create)
+  if git show-ref --verify --quiet refs/heads/runs; then
+    git checkout runs 2>/dev/null || true
+  else
+    git checkout -b runs 2>/dev/null || true
   fi
+  git add creds 2>/dev/null
+  if git diff --cached --quiet; then
+    echo "[build] nothing to commit (creds unchanged)"
+  else
+    git commit -qm "cloud-run: ${label} $(date -u +%Y%m%dT%H%M%SZ) rc=$rc" 2>/dev/null
+    git push origin runs:refs/heads/runs 2>&1 | tail -3
+  fi
+  # return to main for any subsequent steps
+  git checkout main 2>/dev/null || true
+}
+
+if [ -n "$(ls /tmp/zaiout/zai-*.json 2>/dev/null)" ]; then
+  echo "[build] pushing creds via git..."
+  egress_push "creds + log"
+else
+  echo "[build] no creds produced (rc=$rc) — pushing log only"
+  egress_push "log only"
 fi
 exit 0
