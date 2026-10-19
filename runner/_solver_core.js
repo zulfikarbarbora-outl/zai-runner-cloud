@@ -563,7 +563,7 @@ async function solveWidget(page) {
     if (b > 1e-6) hTarget = (-a + Math.sqrt(a * a + 4 * b * targetLeft)) / (2 * b);
     else if (a > 1e-6) hTarget = targetLeft / a;
     else hTarget = targetLeft;
-    hTarget = Math.max(8, Math.min(hTarget, 255));
+    hTarget = Math.max(8, Math.min(hTarget, 280));
     log('plan', `target pieceLeft=${targetLeft} ⇒ handle ${Math.round(hTarget)}px (try ${tryN}) [${method}]`);
     // WAVE-6 BUG-C: batched-waypoint drag. Old code had a 34-46 step loop
     // with 1 page.mouse.move() per step + 1 final settle move = 35-47 CDP
@@ -591,7 +591,7 @@ async function solveWidget(page) {
       const yJitter = (Math.random() - 0.5) * 2.4;
       await page.mouse.move(cx + eased * hTarget, cy + yJitter, { steps: 1 });  // WAVE-7: steps:1 (was 5)
       cdpMoves++;
-      if (t < 1.0) await page.waitForTimeout(10 + Math.random() * 20);  // 10-30ms settle
+      if (t < 1.0) await page.waitForTimeout(200 + Math.random() * 100);  // WAVE-13: 200-300ms settle (was 10-30ms) — total drag ~2s on local/fast connections (Aliyun rejects <1s drags as robotic)
     }
     // Exact-target settle: dampened jitter (±0.3px) for a stable release.
     await page.mouse.move(cx + hTarget, cy + (Math.random() - 0.5) * 0.6, { steps: 1 });  // WAVE-7: steps:1 (was 2)
