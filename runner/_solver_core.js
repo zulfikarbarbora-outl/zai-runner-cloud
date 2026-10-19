@@ -391,7 +391,7 @@ async function solveWidget(page) {
       if (bestPair) bracketCandidates.push({ run, pair: bestPair, dist: bestDist });
     }
     if (bracketCandidates.length) {
-      bracketCandidates.sort((a, b) => a.dist - b.dist);
+      bracketCandidates.sort((a, b) => a.run.mean - b.run.mean);  // WAVE-14: sort by mean (darkest first) — was by bracket dist; photo features have sharper edges (tighter brackets) but real hole masks are darker
       const pick = bracketCandidates[0];
       log('pickHole', `edgeBracket: darkRun x0=${pick.run.x0} w=${pick.run.w} mean=${pick.run.mean.toFixed(0)} ← edgePair x0=${pick.pair.x0} x1=${pick.pair.x1} (bracket dist=${pick.dist})`);
       return { ...pick.run, signal: 'edgeBracket' };
@@ -591,12 +591,12 @@ async function solveWidget(page) {
       const yJitter = (Math.random() - 0.5) * 2.4;
       await page.mouse.move(cx + eased * hTarget, cy + yJitter, { steps: 1 });  // WAVE-7: steps:1 (was 5)
       cdpMoves++;
-      if (t < 1.0) await page.waitForTimeout(200 + Math.random() * 100);  // WAVE-13: 200-300ms settle (was 10-30ms) — total drag ~2s on local/fast connections (Aliyun rejects <1s drags as robotic)
+      if (t < 1.0) await page.waitForTimeout(450 + Math.random() * 150);  // WAVE-14: 450-600ms (was 200-300ms) — total drag ~3s; zenrows 7-8s solved 2/2, sub-1s solved 0/16
     }
     // Exact-target settle: dampened jitter (±0.3px) for a stable release.
     await page.mouse.move(cx + hTarget, cy + (Math.random() - 0.5) * 0.6, { steps: 1 });  // WAVE-7: steps:1 (was 2)
     cdpMoves++;
-    await page.waitForTimeout(350 + Math.random() * 380);  // 350-730ms settle before release
+    await page.waitForTimeout(800 + Math.random() * 400);  // WAVE-14: 800-1200ms (was 350-730ms) — final settle before release
     await page.mouse.up(); cdpMoves++;
     log('drag', `released at handle ${Math.round(hTarget)}px in ${Date.now() - dragStart}ms (drag CDP moves=6, total so far=${cdpMoves}) [${method}]`);
     await sleep(2800);

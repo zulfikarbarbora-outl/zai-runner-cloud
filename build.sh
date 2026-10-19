@@ -44,6 +44,11 @@ egress_push() {
   mkdir -p creds
   cp /tmp/zaiout/zai-*.json creds/ 2>/dev/null || true
   cp /tmp/zaiout/run.log creds/last-run.log 2>/dev/null || true
+  # WAVE-14: also push gap.json, match.json, fail_*.png for diagnostic analysis
+  mkdir -p creds/diagnostics
+  for f in /tmp/zaiout/gap.json /tmp/zaiout/match.json /tmp/zaiout/fail_*.png /tmp/zaiout/popup_*.json; do
+    [ -e "$f" ] && cp "$f" creds/diagnostics/ 2>/dev/null
+  done
   # WAVE-12: the working tree is dirty (dist/ was built). Stash before checkout.
   git stash 2>/dev/null || true
   # create the commit on the runs branch (checkout if exists, else create)
