@@ -315,7 +315,14 @@ function startWatchdog(stallMs = 180000, pollMs = 10000) {
         log('captcha', `re-solve after click ${clickN}: ${okr}`);
       }
     }
-    log('after-signup', `url=${page.url()} title="${await page.title()}"`);
+    // WAVE-10: wrap post-signup page-state reads in try/catch — z.ai may
+    // close/navigate the page after auths/signup 200, and page.title()/url()
+    // throw on a dead page. The signup outcome is already in apiLog; don't
+    // let a diagnostic read kill the run.
+    let afterUrl = '(unknown)', afterTitle = '(unknown)';
+    try { afterUrl = page.url(); } catch (_) {}
+    try { afterTitle = await page.title(); } catch (_) {}
+    log('after-signup', `url=${afterUrl} title="${afterTitle}"`);
     await page.screenshot({ path: `${OUTDIR}/after_signup.png` }).catch(() => {});
     fs.writeFileSync(`${OUTDIR}/api_log.json`, JSON.stringify(apiLog, null, 2));
     const signupOk = apiLog.some((a) => /auths\/signup$/.test(a.url) && a.status === 200);
