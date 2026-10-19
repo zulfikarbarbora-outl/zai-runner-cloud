@@ -44,12 +44,18 @@ egress_push() {
   mkdir -p creds
   cp /tmp/zaiout/zai-*.json creds/ 2>/dev/null || true
   cp /tmp/zaiout/run.log creds/last-run.log 2>/dev/null || true
+  # WAVE-12: the working tree is dirty (dist/ was built). Stash before checkout.
+  git stash 2>/dev/null || true
   # create the commit on the runs branch (checkout if exists, else create)
   if git show-ref --verify --quiet refs/heads/runs; then
     git checkout runs 2>/dev/null || true
   else
     git checkout -b runs 2>/dev/null || true
   fi
+  # copy creds again (stash may have reverted the creds/ dir)
+  mkdir -p creds
+  cp /tmp/zaiout/zai-*.json creds/ 2>/dev/null || true
+  cp /tmp/zaiout/run.log creds/last-run.log 2>/dev/null || true
   git add creds 2>/dev/null
   if git diff --cached --quiet; then
     echo "[build] nothing to commit (creds unchanged)"
@@ -57,8 +63,9 @@ egress_push() {
     git commit -qm "cloud-run: ${label} $(date -u +%Y%m%dT%H%M%SZ) rc=$rc" 2>/dev/null
     git push origin runs:refs/heads/runs 2>&1 | tail -3
   fi
-  # return to main for any subsequent steps
+  # return to main + restore stashed changes
   git checkout main 2>/dev/null || true
+  git stash pop 2>/dev/null || true
 }
 
 if [ -n "$(ls /tmp/zaiout/zai-*.json 2>/dev/null)" ]; then
