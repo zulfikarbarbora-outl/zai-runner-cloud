@@ -1,170 +1,176 @@
-[10:33:50][start] domain=priv.email outdir=/tmp/zaiout ip-check...
-[10:33:50][ip] 18.225.212.155
-[10:33:50][id] email=zs-1792406030-0d26c2@priv.email password=Zkyfzd7r!M8F
-[10:33:54][api] GET …https://chat.z.ai/api/v1/auths/ → 200 {"id":"a712c1e4-372b-4546-88d9-bdf9cda8c53b","email":"guest-1792406034009@guest.com","name":"Guest-1792406034009","role":"guest","
-[10:33:56][watchdog] touch: nav
-[10:33:56][nav] title="Z.ai - Advanced AI Chatbot & Agent powered by GLM-5.3-Flash"
-[10:33:56][ui] email entry via text=Continue with Email
-[10:33:57][aliyun] → 200 verify=- {"CertifyId":"1d5h99g7sD","Message":"success","RequestId":"2B648AA9-BD1F-45E4-8037-76271EA7E197","Image":"qst/aigc/online/2/72010dd7-fc16-4d1b-9410-d5
-[10:33:58][aliyun] → 200 verify=- {"Code":"Success","Success":true}
-[10:33:58][fill] input[type="email"]
-[10:33:58][fill] input[name="email"]
-[10:33:58][fill] input[type="password"]
-[10:33:58][fill] input[name="current-password"]
-[10:33:58][ui] widget start via text=Click to start verification
-[10:33:58][slider] handle at {"x":570,"y":643.5,"w":40,"h":40}
-[10:33:58][match] best=[{"off":29,"score":49.630808553971455},{"off":30,"score":49.90194093686353},{"off":28,"score":49.94300882552608}] worst=[{"off":1,"score":88.38211201629323},{"off":0,"score":88.65976578411407}]
-[10:33:58][gap] darkRuns=[{"x0":206,"x1":286,"w":80,"mean":37.9824871875},{"x0":46,"x1":114,"w":68,"mean":74.09295379901961}] flatRuns=[{"x0":234,"x1":267,"w":33,"sd":10.796753036663015},{"x0":0,"x1":32,"w":32,"sd":18.862624835314374}]
-[10:33:58][pickHole] flatOverlap: darkRun x0=206 w=80 mean=38 (overlaps flat run)
-[10:33:58][target] try 1: PW=70 hole=206(flatOverlap) best[0]=29@49.6 conf=29% ⇒ detectGap[flatOverlap](x0=206 w=80 mean=38) targetLeft=206
-[10:33:59][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
-[10:33:59][plan] target pieceLeft=206 ⇒ handle 230px (try 1) [detectGap[flatOverlap](x0=206 w=80 mean=38)]
-[10:34:00][drag] released at handle 230px in 882ms (drag CDP moves=6, total so far=13) [detectGap[flatOverlap](x0=206 w=80 mean=38)]
-[10:34:00][aliyun] → 200 verify=- {"RequestId":"AC0EC986-2556-4E21-B408-3CEFFA179ECB","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
-[10:34:02][aliyun] → 200 verify=- {"CertifyId":"wNcVR5pVw4","Message":"success","RequestId":"9510DB89-CB0B-49F8-8CCA-C9351F3DEA1C","Image":"qst/aigc/online/2/130a75a7-d63a-4a90-a35c-da
-[10:34:03][captcha] try 1 not solved [detectGap[flatOverlap](x0=206 w=80 mean=38)]: "Please complete security verification
+[10:37:44][start] domain=priv.email outdir=/tmp/zaiout ip-check...
+[10:37:44][ip] 18.225.212.155
+[10:37:44][id] email=zs-1792406264-3d05c7@priv.email password=Zkf2l06d!QQ1
+[10:37:52][api] GET …https://chat.z.ai/api/v1/auths/ → 200 {"id":"ba1f48da-3aa2-495c-96ab-5bf8e921b700","email":"guest-1792406271929@guest.com","name":"Guest-1792406271929","role":"guest","
+[10:37:54][watchdog] touch: nav
+[10:37:54][nav] title="Z.ai - Advanced AI Chatbot & Agent powered by GLM-5.3-Flash"
+[10:37:54][ui] email entry via text=Continue with Email
+[10:37:55][aliyun] → 200 verify=- {"CertifyId":"HyenRpigcN","Message":"success","RequestId":"072BDFB5-9241-41AD-A087-D4A7CAEE79C3","Image":"qst/aigc/online/3/d9f2b59c-b286-4c60-9b10-c5
+[10:37:56][fill] input[type="email"]
+[10:37:56][fill] input[name="email"]
+[10:37:56][fill] input[type="password"]
+[10:37:56][aliyun] → 200 verify=- {"Code":"Success","Success":true}
+[10:37:56][fill] input[name="current-password"]
+[10:37:56][ui] widget start via text=Click to start verification
+[10:37:56][slider] handle at {"x":570,"y":643.5,"w":40,"h":40}
+[10:37:56][match] best=[{"off":224,"score":51.327014592274715},{"off":225,"score":51.350369957081604},{"off":234,"score":52.12322403433484}] worst=[{"off":1,"score":165.7906781115888},{"off":0,"score":165.84098798283355}]
+[10:37:56][gap] darkRuns=[{"x0":115,"x1":155,"w":40,"mean":68.66437979166666}] flatRuns=[{"x0":0,"x1":100,"w":100,"sd":0.7779805805500576}]
+[10:37:56][pickHole] darkest: darkRun x0=115 w=40 mean=69 (no edge/flat validation)
+[10:37:56][target] try 1: PW=26 hole=115(darkest) best[0]=224@51.3 conf=21% ⇒ detectGap[darkest](x0=115 w=40 mean=69) targetLeft=115
+[10:37:57][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
+[10:37:57][plan] target pieceLeft=115 ⇒ handle 169px (try 1) [detectGap[darkest](x0=115 w=40 mean=69)]
+[10:37:58][drag] released at handle 169px in 1550ms (drag CDP moves=6, total so far=13) [detectGap[darkest](x0=115 w=40 mean=69)]
+[10:37:59][aliyun] → 200 verify=- {"RequestId":"8F526E26-B66E-459F-B29B-B16443BB1D19","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"securityToken"
+[10:38:01][captcha] SOLVED (try 1) [detectGap[darkest](x0=115 w=40 mean=69)]
+[10:38:02][ui] signup switch via button:has-text("Sign up")
+[10:38:03][fill] name via input[placeholder*="Full Name" i]
+[10:38:03][aliyun] → 200 verify=- {"CertifyId":"RQo1gltG1x","Message":"success","RequestId":"4E404250-9685-4F66-B7E8-CFA4336E70D6","Image":"qst/aigc/online/2/c6b5267a-6329-4e79-8d10-3b
+[10:38:03][aliyun] → 200 verify=- {"Code":"Success","Success":true}
+[10:38:05][ui] widget start 2 via text=Click to start verification
+[10:38:05][slider] handle at {"x":570,"y":688.5,"w":40,"h":40}
+[10:38:05][match] best=[{"off":109,"score":40.570232155232155},{"off":110,"score":42.62032016632017},{"off":108,"score":44.57094386694381}] worst=[{"off":201,"score":123.65531670131648},{"off":202,"score":123.76139778239757}]
+[10:38:05][gap] darkRuns=[{"x0":55,"x1":84,"w":29,"mean":66.01669022988506},{"x0":199,"x1":244,"w":45,"mean":79.68875555555555}] flatRuns=[{"x0":257,"x1":300,"w":43,"sd":1.0468835105112164},{"x0":0,"x1":54,"w":54,"sd":4.019919100675148}]
+[10:38:05][pickHole] darkest: darkRun x0=55 w=29 mean=66 (no edge/flat validation)
+[10:38:05][target] try 1: PW=26 hole=55(darkest) best[0]=109@40.6 conf=31% ⇒ detectGap[darkest](x0=55 w=29 mean=66) targetLeft=55
+[10:38:06][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
+[10:38:06][plan] target pieceLeft=55 ⇒ handle 114px (try 1) [detectGap[darkest](x0=55 w=29 mean=66)]
+[10:38:07][drag] released at handle 114px in 1761ms (drag CDP moves=6, total so far=13) [detectGap[darkest](x0=55 w=29 mean=66)]
+[10:38:08][aliyun] → 200 verify=- {"RequestId":"04839D3B-8D2C-4916-94BF-1D9907D59E14","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
+[10:38:10][aliyun] → 200 verify=- {"CertifyId":"0f4tIVeP54","Message":"success","RequestId":"CED28047-FBAB-434A-ADFF-358C0037B8FD","Image":"qst/aigc/online/2/1a2abc3b-884e-4aa4-99c9-7f
+[10:38:10][captcha] try 1 not solved [detectGap[darkest](x0=55 w=29 mean=66)]: "Please complete security verification
 
 
 
 Please drag the slider to restore the complete"
-[10:34:03][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:03][aliyun] → 200 verify=- {"CertifyId":"8PaFRu2tqt","Message":"success","RequestId":"F39DB034-7ACB-4FA9-B933-9DBAABA93F52","Image":"qst/aigc/online/2/10f34b49-2a06-4296-aa24-06
-[10:34:05][dump] popup_retry1: bg=none piece=29x300 left=0px box={"x":570,"y":336,"w":29,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/10
-[10:34:06][match] best=[{"off":200,"score":24.95842084327762},{"off":199,"score":28.01236515513127},{"off":201,"score":28.625649164677803}] worst=[{"off":2,"score":104.67646380270475},{"off":1,"score":104.76042800318218}]
-[10:34:06][gap] darkRuns=[{"x0":0,"x1":51,"w":51,"mean":43.584246241830066},{"x0":222,"x1":300,"w":78,"mean":51.964961965811966},{"x0":123,"x1":153,"w":30,"mean":66.12767305555556}] flatRuns=[{"x0":0,"x1":40,"w":40,"sd":7.977913015663134},{"x0":255,"x1":300,"w":45,"sd":8.332162662010798}]
-[10:34:06][match] retry match: [{"off":200,"score":24.95842084327762},{"off":199,"score":28.01236515513127}]
-[10:34:06][pickHole] darkest: darkRun x0=123 w=30 mean=66 (no edge/flat validation)
-[10:34:06][target] try 2: PW=29 hole=123(darkest) best[0]=200@25.0 conf=57% ⇒ detectGap[darkest](x0=123 w=30 mean=66) targetLeft=123
-[10:34:06][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
-[10:34:06][plan] target pieceLeft=123 ⇒ handle 176px (try 2) [detectGap[darkest](x0=123 w=30 mean=66)]
-[10:34:07][drag] released at handle 176px in 718ms (drag CDP moves=6, total so far=13) [detectGap[darkest](x0=123 w=30 mean=66)]
-[10:34:07][aliyun] → 200 verify=- {"RequestId":"32DB0DCB-C80D-4FC6-BAEA-37030A6FFE18","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
-[10:34:09][aliyun] → 200 verify=- {"CertifyId":"WEJa0bEuZS","Message":"success","RequestId":"B4058344-DC65-4FDC-890F-5AAB2B051A89","Image":"qst/aigc/online/2/2a8eedb0-a843-4992-939f-b8
-[10:34:10][captcha] try 2 not solved [detectGap[darkest](x0=123 w=30 mean=66)]: "Please complete security verification
+[10:38:10][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:11][aliyun] → 200 verify=- {"CertifyId":"IdFdIiBJFv","Message":"success","RequestId":"738E1A1E-821A-490A-8AA0-203433434DA5","Image":"qst/aigc/online/3/6b20ceee-8573-42b8-968b-e1
+[10:38:13][dump] popup_retry1: bg=none piece=92x300 left=0px box={"x":570,"y":381,"w":92,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/3/6b
+[10:38:13][match] best=[{"off":12,"score":64.05344615384615},{"off":13,"score":64.09650177514797},{"off":14,"score":64.71683550295867}] worst=[{"off":77,"score":163.63004615384628},{"off":78,"score":163.7651550295857}]
+[10:38:13][gap] darkRuns=[{"x0":248,"x1":300,"w":52,"mean":57.431408012820526},{"x0":58,"x1":91,"w":33,"mean":65.03955858585857},{"x0":0,"x1":51,"w":51,"mean":72.74041062091501}] flatRuns=[]
+[10:38:13][match] retry match: [{"off":12,"score":64.05344615384615},{"off":13,"score":64.09650177514797}]
+[10:38:13][pickHole] no width-matching darkRuns (PW=92, runs=[{"x0":248,"w":52},{"x0":58,"w":33},{"x0":0,"w":51}]) → null
+[10:38:13][match] both signals weak: best score 64.1>30 + no detectGap hole — refreshing
+[10:38:13][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:14][aliyun] → 200 verify=- {"CertifyId":"SfYLRQO2ZY","Message":"success","RequestId":"3FA0B3A0-32E1-4CA3-BDF3-CAC8F2D9E74D","Image":"qst/aigc/online/2/de53cf41-75f8-4ec5-893f-11
+[10:38:16][dump] popup_weak2: bg=none piece=45x300 left=0px box={"x":570,"y":381,"w":45,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/de
+[10:38:16][match] best=[{"off":255,"score":32.05873895582331},{"off":254,"score":32.4279293172691},{"off":253,"score":32.78646265060243}] worst=[{"off":13,"score":88.5080626506024},{"off":12,"score":88.54536626506031}]
+[10:38:16][gap] darkRuns=[{"x0":159,"x1":183,"w":24,"mean":88.49775312500002}] flatRuns=[{"x0":0,"x1":73,"w":73,"sd":7.734384951279906},{"x0":239,"x1":300,"w":61,"sd":7.753843711379127}]
+[10:38:16][pickHole] no width-matching darkRuns (PW=45, runs=[{"x0":159,"w":24}]) → null
+[10:38:16][match] both signals weak: best score 32.1>30 + no detectGap hole — refreshing
+[10:38:16][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:17][aliyun] → 200 verify=- {"CertifyId":"9MoOqzjCsr","Message":"success","RequestId":"655BD5A1-2284-4170-A9F0-D18C2F1CEB9E","Image":"qst/aigc/online/3/e64bfcfc-b3ac-4bb4-abfd-41
+[10:38:19][dump] popup_weak3: bg=none piece=23x300 left=0px box={"x":570,"y":381,"w":23,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/3/e6
+[10:38:19][match] best=[{"off":197,"score":22.20818409090906},{"off":224,"score":24.27757386363634},{"off":198,"score":24.797453409090856}] worst=[{"off":246,"score":69.14789999999994},{"off":245,"score":69.37049772727269}]
+[10:38:19][gap] darkRuns=[{"x0":190,"x1":215,"w":25,"mean":99.749469}] flatRuns=[{"x0":156,"x1":174,"w":18,"sd":11.926805493056778}]
+[10:38:19][pickHole] darkest: darkRun x0=190 w=25 mean=100 (no edge/flat validation)
+[10:38:19][target] try 4: PW=23 hole=190(darkest) best[0]=197@22.2 conf=37% ⇒ detectGap[darkest](x0=190 w=25 mean=100) targetLeft=190
+[10:38:20][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
+[10:38:20][plan] target pieceLeft=190 ⇒ handle 221px (try 4) [detectGap[darkest](x0=190 w=25 mean=100)]
+[10:38:21][drag] released at handle 221px in 1737ms (drag CDP moves=6, total so far=13) [detectGap[darkest](x0=190 w=25 mean=100)]
+[10:38:22][aliyun] → 200 verify=- {"RequestId":"4411269D-5461-4039-9B92-317C5A01CDA3","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
+[10:38:23][aliyun] → 200 verify=- {"CertifyId":"30sIFJbNFQ","Message":"success","RequestId":"D2B051C6-7391-4AE6-87A0-53B2A78A6F45","Image":"qst/aigc/online/2/69a7adc8-2edc-4ee0-a4cd-52
+[10:38:24][captcha] try 4 not solved [detectGap[darkest](x0=190 w=25 mean=100)]: "Please complete security verification
 
 
 
 Please drag the slider to restore the complete"
-[10:34:10][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:10][aliyun] → 200 verify=- {"CertifyId":"IReNu4qFbw","Message":"success","RequestId":"5E1D31E9-B663-4CBB-A0AD-EA797515C31F","Image":"qst/aigc/online/2/9e80a1ef-34b9-4e4a-8f9b-cf
-[10:34:13][dump] popup_retry2: bg=none piece=13x300 left=0px box={"x":570,"y":336,"w":13,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/9e
-[10:34:13][match] best=[{"off":179,"score":25.210361930294905},{"off":180,"score":25.691300268096523},{"off":136,"score":26.5148927613941}] worst=[{"off":13,"score":137.11334584450404},{"off":14,"score":137.25312600536188}]
-[10:34:13][gap] darkRuns=[{"x0":0,"x1":50,"w":50,"mean":54.06008250000001},{"x0":250,"x1":300,"w":50,"mean":69.082734}] flatRuns=[{"x0":232,"x1":257,"w":25,"sd":11.003288687356257},{"x0":44,"x1":75,"w":31,"sd":12.622252706671098}]
-[10:34:13][match] retry match: [{"off":179,"score":25.210361930294905},{"off":180,"score":25.691300268096523}]
-[10:34:13][pickHole] no width-matching darkRuns (PW=13, runs=[{"x0":0,"w":50},{"x0":250,"w":50}]) → null
-[10:34:13][match] narrow piece (13px) — refreshing for a wider one (1/2)
-[10:34:13][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:13][aliyun] → 200 verify=- {"CertifyId":"GoRlX6z3z6","Message":"success","RequestId":"568FCC5E-BB14-4C88-837C-4FCFEB1AE1CD","Image":"qst/aigc/online/2/0d54bdbf-5570-47fa-a56e-24
-[10:34:16][dump] popup_narrow3: bg=none piece=16x300 left=0px box={"x":570,"y":336,"w":16,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/0d
-[10:34:16][match] best=[{"off":134,"score":18.49928666666667},{"off":133,"score":21.35355333333333},{"off":135,"score":21.538719999999998}] worst=[{"off":278,"score":103.5327533333333},{"off":277,"score":104.20240000000001}]
-[10:34:16][gap] darkRuns=[{"x0":236,"x1":277,"w":41,"mean":80.87348333333335},{"x0":97,"x1":125,"w":28,"mean":99.14383779761904}] flatRuns=[{"x0":220,"x1":300,"w":80,"sd":10.612305424185404},{"x0":0,"x1":24,"w":24,"sd":14.968337142733624}]
-[10:34:16][pickHole] darkest: darkRun x0=97 w=28 mean=99 (no edge/flat validation)
-[10:34:16][target] try 4: PW=16 hole=97(darkest) best[0]=134@18.5 conf=30% ⇒ detectGap[darkest](x0=97 w=28 mean=99) targetLeft=97
-[10:34:16][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
-[10:34:16][plan] target pieceLeft=97 ⇒ handle 155px (try 4) [detectGap[darkest](x0=97 w=28 mean=99)]
-[10:34:17][drag] released at handle 155px in 781ms (drag CDP moves=6, total so far=13) [detectGap[darkest](x0=97 w=28 mean=99)]
-[10:34:17][aliyun] → 200 verify=- {"RequestId":"73DBC952-9B36-405C-8D63-D86893EF2015","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
-[10:34:19][aliyun] → 200 verify=- {"CertifyId":"tdceISlJGm","Message":"success","RequestId":"454CE865-EEBD-4A19-B504-9C5221965F1B","Image":"qst/aigc/online/2/fcebdb13-f901-4454-84c3-4d
-[10:34:20][captcha] try 4 not solved [detectGap[darkest](x0=97 w=28 mean=99)]: "Please complete security verification
+[10:38:24][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:25][aliyun] → 200 verify=- {"CertifyId":"tYgwrPHENW","Message":"success","RequestId":"D6D9D0D2-2F71-498B-B769-FA6B384D6AC7","Image":"qst/aigc/online/2/673ab892-9abd-4e08-a4c0-22
+[10:38:27][dump] popup_retry4: bg=none piece=17x300 left=0px box={"x":570,"y":381,"w":17,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/67
+[10:38:27][match] best=[{"off":46,"score":57.45321226415098},{"off":47,"score":57.65163207547171},{"off":45,"score":57.69528301886795}] worst=[{"off":109,"score":158.7169905660377},{"off":107,"score":158.80887735849058}]
+[10:38:27][gap] darkRuns=[] flatRuns=[]
+[10:38:27][match] retry match: [{"off":46,"score":57.45321226415098},{"off":47,"score":57.65163207547171}]
+[10:38:27][pickHole] edgePairFallback: no darkRuns, pick edgePair x0=51 x1=69 w=18 (closest to PW=17)
+[10:38:27][target] try 5: PW=17 hole=51(edgePairFallback) best[0]=46@57.5 conf=10% ⇒ detectGap[edgePairFallback-weak](x0=51 w=18) targetLeft=51
+[10:38:28][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
+[10:38:28][plan] target pieceLeft=51 ⇒ handle 110px (try 5) [detectGap[edgePairFallback-weak](x0=51 w=18)]
+[10:38:29][drag] released at handle 110px in 1505ms (drag CDP moves=6, total so far=13) [detectGap[edgePairFallback-weak](x0=51 w=18)]
+[10:38:30][aliyun] → 200 verify=- {"RequestId":"4F520444-8974-420A-8787-83672CD584BF","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
+[10:38:31][aliyun] → 200 verify=- {"CertifyId":"peJ7jGaHnn","Message":"success","RequestId":"1E1E7670-10E2-4CF0-9FDC-9E6AE8C73AF4","Image":"qst/aigc/online/2/8dd678ce-f1ed-4005-8ac5-69
+[10:38:32][captcha] try 5 not solved [detectGap[edgePairFallback-weak](x0=51 w=18)]: "Please complete security verification
 
 
 
 Please drag the slider to restore the complete"
-[10:34:20][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:20][aliyun] → 200 verify=- {"CertifyId":"pOGmbjdcNv","Message":"success","RequestId":"8A070541-CC85-423D-83E1-91B7557EE8A9","Image":"qst/aigc/online/2/8177d5fd-be22-48fc-b090-2c
-[10:34:23][dump] popup_retry4: bg=none piece=28x300 left=0px box={"x":570,"y":336,"w":28,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/81
-[10:34:23][match] best=[{"off":233,"score":24.887306891025645},{"off":232,"score":26.15582852564102},{"off":234,"score":29.927878205128227}] worst=[{"off":1,"score":111.73610576923075},{"off":0,"score":111.80951522435888}]
-[10:34:23][gap] darkRuns=[{"x0":0,"x1":51,"w":51,"mean":43.584246241830066},{"x0":249,"x1":300,"w":51,"mean":50.340457516339875},{"x0":123,"x1":153,"w":30,"mean":66.12767305555556}] flatRuns=[{"x0":261,"x1":300,"w":39,"sd":7.805958057720445},{"x0":0,"x1":40,"w":40,"sd":7.977913015663134}]
-[10:34:23][match] retry match: [{"off":233,"score":24.887306891025645},{"off":232,"score":26.15582852564102}]
-[10:34:23][pickHole] darkest: darkRun x0=123 w=30 mean=66 (no edge/flat validation)
-[10:34:23][target] try 5: PW=28 hole=123(darkest) best[0]=233@24.9 conf=59% ⇒ detectGap[darkest](x0=123 w=30 mean=66) targetLeft=123
-[10:34:23][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
-[10:34:23][plan] target pieceLeft=123 ⇒ handle 176px (try 5) [detectGap[darkest](x0=123 w=30 mean=66)]
-[10:34:24][drag] released at handle 176px in 792ms (drag CDP moves=6, total so far=13) [detectGap[darkest](x0=123 w=30 mean=66)]
-[10:34:24][aliyun] → 200 verify=- {"RequestId":"57CF179F-DF9D-495A-BD40-DE21FE21E3AA","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
-[10:34:26][aliyun] → 200 verify=- {"CertifyId":"BFgFJ9yaM8","Message":"success","RequestId":"485CA4DF-62A5-443D-8B73-ACC3638D1D80","Image":"qst/aigc/online/2/8ae1b2b8-d549-4529-a5b1-57
-[10:34:27][captcha] try 5 not solved [detectGap[darkest](x0=123 w=30 mean=66)]: "Please complete security verification
+[10:38:32][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:32][aliyun] → 200 verify=- {"CertifyId":"1NoEjHHYKs","Message":"success","RequestId":"BC0AB1B6-BBDF-4AF5-A151-629625F92D19","Image":"qst/aigc/online/2/10f34b49-2a06-4296-aa24-06
+[10:38:35][dump] popup_retry5: bg=none piece=29x300 left=0px box={"x":570,"y":381,"w":29,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/10
+[10:38:35][match] best=[{"off":200,"score":24.95842084327762},{"off":199,"score":28.01236515513127},{"off":201,"score":28.625649164677803}] worst=[{"off":2,"score":104.67646380270475},{"off":1,"score":104.76042800318218}]
+[10:38:35][gap] darkRuns=[{"x0":0,"x1":51,"w":51,"mean":43.584246241830066},{"x0":222,"x1":300,"w":78,"mean":51.964961965811966},{"x0":123,"x1":153,"w":30,"mean":66.12767305555556}] flatRuns=[{"x0":0,"x1":40,"w":40,"sd":7.977913015663134},{"x0":255,"x1":300,"w":45,"sd":8.332162662010798}]
+[10:38:35][match] retry match: [{"off":200,"score":24.95842084327762},{"off":199,"score":28.01236515513127}]
+[10:38:35][pickHole] darkest: darkRun x0=123 w=30 mean=66 (no edge/flat validation)
+[10:38:35][target] try 6: PW=29 hole=123(darkest) best[0]=200@25.0 conf=57% ⇒ detectGap[darkest](x0=123 w=30 mean=66) targetLeft=123
+[10:38:35][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
+[10:38:35][plan] target pieceLeft=123 ⇒ handle 176px (try 6) [detectGap[darkest](x0=123 w=30 mean=66)]
+[10:38:37][drag] released at handle 176px in 1767ms (drag CDP moves=6, total so far=13) [detectGap[darkest](x0=123 w=30 mean=66)]
+[10:38:37][aliyun] → 200 verify=- {"RequestId":"9FF509A7-4E4B-4DC9-86D2-88EB3AEA663F","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
+[10:38:39][aliyun] → 200 verify=- {"CertifyId":"POxvLCca4N","Message":"success","RequestId":"7432F87A-EB92-4946-880A-EE607F17AEE8","Image":"qst/aigc/online/2/5b78a343-4c94-414a-ba39-bd
+[10:38:40][captcha] try 6 not solved [detectGap[darkest](x0=123 w=30 mean=66)]: "Please complete security verification
 
 
 
 Please drag the slider to restore the complete"
-[10:34:27][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:27][aliyun] → 200 verify=- {"CertifyId":"Th88zLrZCa","Message":"success","RequestId":"B659CC9F-979E-419B-9B3B-7AA2540D6C93","Image":"qst/aigc/online/2/05a32232-c5a1-4156-ae9d-b0
-[10:34:30][dump] popup_retry5: bg=none piece=23x300 left=0px box={"x":570,"y":336,"w":23,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/05
-[10:34:30][match] best=[{"off":61,"score":52.166039565554755},{"off":185,"score":52.47361365399536},{"off":62,"score":52.477546935609034}] worst=[{"off":40,"score":81.076882854926},{"off":39,"score":82.56478277734662}]
-[10:34:30][gap] darkRuns=[{"x0":227,"x1":249,"w":22,"mean":65.22211628787878},{"x0":50,"x1":69,"w":19,"mean":75.59730964912278}] flatRuns=[{"x0":245,"x1":300,"w":55,"sd":2.071028515116425},{"x0":0,"x1":56,"w":56,"sd":3.2291611503282955}]
-[10:34:30][match] retry match: [{"off":61,"score":52.166039565554755},{"off":185,"score":52.47361365399536}]
-[10:34:30][pickHole] edgeBracket: darkRun x0=50 w=19 mean=76 ← edgePair x0=56 x1=74 (bracket dist=11)
-[10:34:30][target] try 6: PW=23 hole=50(edgeBracket) best[0]=61@52.2 conf=15% ⇒ detectGap[edgeBracket](x0=50 w=19 mean=76) targetLeft=50
-[10:34:30][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
-[10:34:30][plan] target pieceLeft=50 ⇒ handle 108px (try 6) [detectGap[edgeBracket](x0=50 w=19 mean=76)]
-[10:34:31][drag] released at handle 108px in 715ms (drag CDP moves=6, total so far=13) [detectGap[edgeBracket](x0=50 w=19 mean=76)]
-[10:34:31][aliyun] → 200 verify=- {"RequestId":"0E0375C7-5FF1-48D5-9F65-71A56AF63CE8","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
-[10:34:33][aliyun] → 200 verify=- {"CertifyId":"hR1f9IlZkk","Message":"success","RequestId":"9443E6F4-D9FF-4741-9DAB-062290CD0590","Image":"qst/aigc/online/2/2aeba234-63d8-4374-b553-9f
-[10:34:34][captcha] try 6 not solved [detectGap[edgeBracket](x0=50 w=19 mean=76)]: "Please complete security verification
+[10:38:40][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:40][aliyun] → 200 verify=- {"CertifyId":"BNzzhj6ozy","Message":"success","RequestId":"CEC11646-C165-4843-8CE5-462A58B5901A","Image":"qst/aigc/online/3/eecb808a-0551-4d09-b8c4-07
+[10:38:43][dump] popup_retry6: bg=none piece=52x300 left=0px box={"x":570,"y":381,"w":52,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/3/ee
+[10:38:43][match] best=[{"off":12,"score":59.352137453383},{"off":13,"score":59.525784762919606},{"off":11,"score":59.90579595098559}] worst=[{"off":123,"score":122.11783324453901},{"off":124,"score":122.45776185402231}]
+[10:38:43][gap] darkRuns=[{"x0":177,"x1":202,"w":25,"mean":65.77502633333336},{"x0":57,"x1":86,"w":29,"mean":82.12397068965517},{"x0":131,"x1":169,"w":38,"mean":84.96812741228071}] flatRuns=[{"x0":220,"x1":300,"w":80,"sd":0.5875598734503933},{"x0":35,"x1":54,"w":19,"sd":10.072228611937396}]
+[10:38:43][match] retry match: [{"off":12,"score":59.352137453383},{"off":13,"score":59.525784762919606}]
+[10:38:43][pickHole] no width-matching darkRuns (PW=52, runs=[{"x0":177,"w":25},{"x0":57,"w":29},{"x0":131,"w":38}]) → null
+[10:38:43][match] both signals weak: best score 59.4>30 + no detectGap hole — refreshing
+[10:38:43][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:43][aliyun] → 200 verify=- {"CertifyId":"qqyn9VEhsv","Message":"success","RequestId":"D5B41A9D-E2B3-4DFD-9F4A-0D35563A5E4B","Image":"qst/aigc/online/2/dc793204-f9fa-4245-bb3a-fb
+[10:38:46][dump] popup_weak7: bg=none piece=21x300 left=0px box={"x":570,"y":381,"w":21,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/dc
+[10:38:46][match] best=[{"off":129,"score":39.02241949152543},{"off":15,"score":39.14691525423729},{"off":128,"score":39.2492033898305}] worst=[{"off":266,"score":69.6133559322034},{"off":267,"score":71.04657203389829}]
+[10:38:46][gap] darkRuns=[{"x0":34,"x1":67,"w":33,"mean":90.87599494949495}] flatRuns=[{"x0":0,"x1":47,"w":47,"sd":8.595419063597058},{"x0":280,"x1":300,"w":20,"sd":15.817250402140072}]
+[10:38:46][pickHole] flatOverlap: darkRun x0=34 w=33 mean=91 (overlaps flat run)
+[10:38:46][target] try 8: PW=21 hole=34(flatOverlap) best[0]=129@39.0 conf=11% ⇒ detectGap[flatOverlap](x0=34 w=33 mean=91) targetLeft=34
+[10:38:46][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
+[10:38:46][plan] target pieceLeft=34 ⇒ handle 88px (try 8) [detectGap[flatOverlap](x0=34 w=33 mean=91)]
+[10:38:48][drag] released at handle 88px in 1582ms (drag CDP moves=6, total so far=13) [detectGap[flatOverlap](x0=34 w=33 mean=91)]
+[10:38:48][aliyun] → 200 verify=- {"RequestId":"35A3FAEF-CA59-4E32-BD80-59A56AE9912E","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
+[10:38:50][aliyun] → 200 verify=- {"CertifyId":"r3Zgz3EJAP","Message":"success","RequestId":"6080B854-CFE1-436F-99C4-262BBA9B82CC","Image":"qst/aigc/online/2/9c744ce9-d2a7-4266-8739-f1
+[10:38:51][captcha] try 8 not solved [detectGap[flatOverlap](x0=34 w=33 mean=91)]: "Please complete security verification
 
 
 
 Please drag the slider to restore the complete"
-[10:34:34][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:34][aliyun] → 200 verify=- {"CertifyId":"s8N9BB8yuB","Message":"success","RequestId":"710F5806-348D-4188-899F-A52DBE19F274","Image":"qst/aigc/online/3/1cc8a516-3b44-42c9-a289-23
-[10:34:37][dump] popup_retry6: bg=none piece=14x300 left=0px box={"x":570,"y":336,"w":14,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/3/1c
-[10:34:37][match] best=[{"off":228,"score":84.42810557532616},{"off":229,"score":85.29286951364189},{"off":227,"score":86.00438078291809}] worst=[{"off":1,"score":154.7997971530249},{"off":0,"score":154.89022064056945}]
-[10:34:37][gap] darkRuns=[{"x0":275,"x1":295,"w":20,"mean":69.02556541666665},{"x0":168,"x1":195,"w":27,"mean":70.45034876543207},{"x0":205,"x1":229,"w":24,"mean":71.79868576388887}] flatRuns=[]
-[10:34:37][match] retry match: [{"off":228,"score":84.42810557532616},{"off":229,"score":85.29286951364189}]
-[10:34:37][pickHole] edgeBracket: darkRun x0=275 w=20 mean=69 ← edgePair x0=275 x1=293 (bracket dist=2)
-[10:34:37][target] try 7: PW=14 hole=275(edgeBracket) best[0]=228@84.4 conf=26% ⇒ detectGap[edgeBracket](x0=275 w=20 mean=69) targetLeft=275
-[10:34:37][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
-[10:34:37][plan] target pieceLeft=275 ⇒ handle 255px (try 7) [detectGap[edgeBracket](x0=275 w=20 mean=69)]
-[10:34:38][drag] released at handle 255px in 727ms (drag CDP moves=6, total so far=13) [detectGap[edgeBracket](x0=275 w=20 mean=69)]
-[10:34:39][aliyun] → 200 verify=- {"RequestId":"4F55F56A-101B-4536-887E-D4BB233228E4","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
-[10:34:40][aliyun] → 200 verify=- {"CertifyId":"XwL3j0J7Ha","Message":"success","RequestId":"35E908D5-9A63-4D46-A822-7F9BF79701B2","Image":"qst/aigc/online/2/eee3ba2b-00d2-46b5-b43a-4f
-[10:34:41][captcha] try 7 not solved [detectGap[edgeBracket](x0=275 w=20 mean=69)]: "Please complete security verification
+[10:38:51][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:51][aliyun] → 200 verify=- {"CertifyId":"pXD2PNMq6T","Message":"success","RequestId":"13806065-D11E-438A-B1D1-15C6AC6D6DCE","Image":"qst/aigc/online/3/25afc171-fc15-4e08-8a4f-ec
+[10:38:53][dump] popup_retry8: bg=none piece=14x300 left=0px box={"x":570,"y":381,"w":14,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/3/25
+[10:38:54][match] best=[{"off":175,"score":84.42810557532616},{"off":176,"score":85.29286951364189},{"off":174,"score":86.00438078291809}] worst=[{"off":1,"score":150.98044958481623},{"off":0,"score":151.0489454329775}]
+[10:38:54][gap] darkRuns=[{"x0":253,"x1":300,"w":47,"mean":60.136178723404264},{"x0":218,"x1":248,"w":30,"mean":71.06983833333334},{"x0":151,"x1":213,"w":62,"mean":71.90427258064516}] flatRuns=[{"x0":257,"x1":300,"w":43,"sd":4.260652622021902},{"x0":116,"x1":138,"w":22,"sd":8.540295675380689}]
+[10:38:54][match] retry match: [{"off":175,"score":84.42810557532616},{"off":176,"score":85.29286951364189}]
+[10:38:54][pickHole] flatOverlap: darkRun x0=218 w=30 mean=71 (overlaps flat run)
+[10:38:54][target] try 9: PW=14 hole=218(flatOverlap) best[0]=175@84.4 conf=25% ⇒ detectGap[flatOverlap](x0=218 w=30 mean=71) targetLeft=218
+[10:38:54][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
+[10:38:54][plan] target pieceLeft=218 ⇒ handle 237px (try 9) [detectGap[flatOverlap](x0=218 w=30 mean=71)]
+[10:38:56][drag] released at handle 237px in 1703ms (drag CDP moves=6, total so far=13) [detectGap[flatOverlap](x0=218 w=30 mean=71)]
+[10:38:56][aliyun] → 200 verify=- {"RequestId":"91740420-CAF8-4BB9-BC91-91BE5C0B29D6","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
+[10:38:58][aliyun] → 200 verify=- {"CertifyId":"bFN6R1PwS1","Message":"success","RequestId":"9EE0B3F7-3312-44AF-B10A-9ABF9F44F6DB","Image":"qst/aigc/online/2/6340c8e8-ea9f-4fcf-9668-6a
+[10:38:59][captcha] try 9 not solved [detectGap[flatOverlap](x0=218 w=30 mean=71)]: "Please complete security verification
 
 
 
 Please drag the slider to restore the complete"
-[10:34:41][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:41][aliyun] → 200 verify=- {"CertifyId":"S64haizzQr","Message":"success","RequestId":"18568A68-82ED-4513-A3D8-18F724A76DCE","Image":"qst/aigc/online/3/eb120da4-4386-401a-927f-a2
-[10:34:44][dump] popup_retry7: bg=none piece=18x300 left=0px box={"x":570,"y":336,"w":18,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/3/eb
-[10:34:44][match] best=[{"off":93,"score":32.82542507645258},{"off":94,"score":32.92085321100919},{"off":92,"score":33.02733027522936}] worst=[{"off":142,"score":181.2267278287461},{"off":141,"score":181.22867584097867}]
-[10:34:44][gap] darkRuns=[{"x0":281,"x1":300,"w":19,"mean":66.84450833333332},{"x0":1,"x1":76,"w":75,"mean":71.87776166666667}] flatRuns=[]
-[10:34:44][match] retry match: [{"off":93,"score":32.82542507645258},{"off":94,"score":32.92085321100919}]
-[10:34:44][pickHole] darkest: darkRun x0=281 w=19 mean=67 (no edge/flat validation)
-[10:34:44][target] try 8: PW=18 hole=281(darkest) best[0]=93@32.8 conf=50% ⇒ detectGap[darkest](x0=281 w=19 mean=67) targetLeft=281
-[10:34:44][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
-[10:34:44][plan] target pieceLeft=281 ⇒ handle 255px (try 8) [detectGap[darkest](x0=281 w=19 mean=67)]
-[10:34:45][drag] released at handle 255px in 723ms (drag CDP moves=6, total so far=13) [detectGap[darkest](x0=281 w=19 mean=67)]
-[10:34:45][aliyun] → 200 verify=- {"RequestId":"A97CF97E-CF9A-4259-BA27-30D32F65AA3D","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
-[10:34:47][aliyun] → 200 verify=- {"CertifyId":"0V646srZOU","Message":"success","RequestId":"8B22ABB5-99A1-4B4C-B6B0-26E232477B2A","Image":"qst/aigc/online/2/716e70c1-58ad-4078-9946-4a
-[10:34:48][captcha] try 8 not solved [detectGap[darkest](x0=281 w=19 mean=67)]: "Please complete security verification
+[10:38:59][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:38:59][aliyun] → 200 verify=- {"CertifyId":"8sZ8ldPnjj","Message":"success","RequestId":"3868C94F-336A-4350-B12B-797B1644D285","Image":"qst/aigc/online/3/46cd77de-dbb1-433a-9a22-d4
+[10:39:01][dump] popup_retry9: bg=none piece=16x300 left=0px box={"x":570,"y":381,"w":16,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/3/46
+[10:39:02][match] best=[{"off":201,"score":25.80431740976643},{"off":202,"score":28.09963800424628},{"off":132,"score":30.72390764331212}] worst=[{"off":16,"score":138.91814968152866},{"off":17,"score":138.94288216560517}]
+[10:39:02][gap] darkRuns=[{"x0":213,"x1":300,"w":87,"mean":62.23329856321838},{"x0":146,"x1":170,"w":24,"mean":64.61399340277778},{"x0":184,"x1":208,"w":24,"mean":70.06350729166665}] flatRuns=[{"x0":0,"x1":96,"w":96,"sd":3.096927497909176},{"x0":250,"x1":300,"w":50,"sd":4.512998629273564}]
+[10:39:02][match] retry match: [{"off":201,"score":25.80431740976643},{"off":202,"score":28.09963800424628}]
+[10:39:02][pickHole] edgeBracket: darkRun x0=146 w=24 mean=65 ← edgePair x0=145 x1=170 (bracket dist=1)
+[10:39:02][target] try 10: PW=16 hole=146(edgeBracket) best[0]=201@25.8 conf=68% ⇒ detectGap[edgeBracket](x0=146 w=24 mean=65) targetLeft=146
+[10:39:02][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
+[10:39:02][plan] target pieceLeft=146 ⇒ handle 192px (try 10) [detectGap[edgeBracket](x0=146 w=24 mean=65)]
+[10:39:04][drag] released at handle 192px in 1724ms (drag CDP moves=6, total so far=13) [detectGap[edgeBracket](x0=146 w=24 mean=65)]
+[10:39:04][aliyun] → 200 verify=- {"RequestId":"8C7B58F7-870E-4022-988C-343A2B1C7555","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
+[10:39:06][aliyun] → 200 verify=- {"CertifyId":"Efu3vjp54M","Message":"success","RequestId":"BD293372-E86D-4AD8-A98E-CFA8114EC3B5","Image":"qst/aigc/online/2/2c0e5159-e764-41b4-9656-78
+[10:39:07][captcha] try 10 not solved [detectGap[edgeBracket](x0=146 w=24 mean=65)]: "Please complete security verification
 
 
 
 Please drag the slider to restore the complete"
-[10:34:48][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:48][aliyun] → 200 verify=- {"CertifyId":"qigKS0SVBI","Message":"success","RequestId":"46C6494E-5ED9-42AB-881D-B0B68F99E106","Image":"qst/aigc/online/2/8dd678ce-f1ed-4005-8ac5-69
-[10:34:51][dump] popup_retry8: bg=none piece=42x300 left=0px box={"x":570,"y":336,"w":42,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/8d
-[10:34:51][match] best=[{"off":153,"score":39.61906388206386},{"off":154,"score":40.06098402948402},{"off":152,"score":40.3850773955774}] worst=[{"off":43,"score":113.25716093366071},{"off":44,"score":113.29315479115503}]
-[10:34:51][gap] darkRuns=[{"x0":47,"x1":76,"w":29,"mean":52.718442241379314},{"x0":240,"x1":258,"w":18,"mean":76.28049490740743},{"x0":182,"x1":204,"w":22,"mean":90.0495068181818}] flatRuns=[]
-[10:34:51][match] retry match: [{"off":153,"score":39.61906388206386},{"off":154,"score":40.06098402948402}]
-[10:34:51][pickHole] no width-matching darkRuns (PW=42, runs=[{"x0":47,"w":29},{"x0":240,"w":18},{"x0":182,"w":22}]) → null
-[10:34:51][match] both signals weak: best score 39.6>30 + no detectGap hole — refreshing
-[10:34:51][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
-[10:34:51][aliyun] → 200 verify=- {"CertifyId":"RJqWjjx94i","Message":"success","RequestId":"71F27B0E-6B2B-4A1F-BA1B-A7316EA3141C","Image":"qst/aigc/online/2/b68178c9-3839-4594-b50f-e3
-[10:34:54][dump] popup_weak9: bg=none piece=65x300 left=0px box={"x":570,"y":336,"w":65,"h":300} src=https://static-captcha-sgp.aliyuncs.com/qst/aigc/online/2/b6
-[10:34:54][match] best=[{"off":142,"score":71.10058946270183},{"off":141,"score":71.26757876890936},{"off":143,"score":71.52010589462684}] worst=[{"off":28,"score":105.79178064684383},{"off":29,"score":106.18454303599327}]
-[10:34:54][gap] darkRuns=[] flatRuns=[{"x0":259,"x1":300,"w":41,"sd":1.1543958804070156},{"x0":0,"x1":33,"w":33,"sd":1.3457610642271507}]
-[10:34:54][pickHole] edgePairFallback: no darkRuns, pick edgePair x0=97 x1=115 w=18 (closest to PW=65)
-[10:34:54][target] try 10: PW=65 hole=97(edgePairFallback) best[0]=142@71.1 conf=4% ⇒ detectGap[edgePairFallback-weak](x0=97 w=18) targetLeft=97
-[10:34:54][calib] probes h=35→p=7.0, h=140→p=80.4 ⇒ p = 0.0769·h + 0.00355·h²
-[10:34:54][plan] target pieceLeft=97 ⇒ handle 155px (try 10) [detectGap[edgePairFallback-weak](x0=97 w=18)]
-[10:34:55][drag] released at handle 155px in 708ms (drag CDP moves=6, total so far=13) [detectGap[edgePairFallback-weak](x0=97 w=18)]
-[10:34:55][aliyun] → 200 verify=- {"RequestId":"D85D8381-D208-4923-BF18-BA9978DC5134","Message":"success","HttpStatusCode":200,"Code":"Success","Success":true,"Result":{"VerifyCode":"F
-[10:34:57][aliyun] → 200 verify=- {"CertifyId":"nySj0UyOuL","Message":"success","RequestId":"E875FFF4-F309-49D9-88D7-210784BEC062","Image":"qst/aigc/online/2/8ae1b2b8-d549-4529-a5b1-57
-[10:34:58][captcha] try 10 not solved [detectGap[edgePairFallback-weak](x0=97 w=18)]: "Please complete security verification
-
-
-
-Please drag the slider to restore the complete"
-[10:34:58][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:39:07][ui] refresh via [id*="aliyunCaptcha-btn-refresh"]
+[10:39:07][watchdog] touch: captcha-r2
+[10:39:07][captcha] round 2 solved=false
