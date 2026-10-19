@@ -1,0 +1,31 @@
+{
+  "present": true,
+  "visible": true,
+  "title": "Please complete security verification",
+  "text": "Please complete security verification\n\n\n\nPlease drag the slider to restore the complete image\nCertifyId: PEM7fdbdUo",
+  "img": {
+    "id": "aliyunCaptcha-img",
+    "natural": [
+      300,
+      300
+    ],
+    "display": [
+      300,
+      300
+    ],
+    "box": {
+      "x": 570,
+      "y": 381,
+      "w": 300,
+      "h": 300
+    },
+    "srcLen": 118
+  },
+  "sliders": [
+    {
+      "id": "aliyunCaptcha-sliding-slider",
+      "cls": "slider-move initial",
+      "tag": "DIV"
+    }
+  ]
+}
