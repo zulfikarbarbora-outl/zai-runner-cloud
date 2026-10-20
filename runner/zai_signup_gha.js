@@ -294,12 +294,50 @@ function startWatchdog(stallMs = 180000, pollMs = 10000) {
     }
 
     // Create Account — verify the signup POST actually fired; retry clicks
+    // WAVE-16: the old code only clicked the button — but a DISABLED button
+    // passes isVisible() but doesn't fire the click handler. Fix: check
+    // isEnabled(), try Enter-key submit, try form.submit() via evaluate,
+    // and dump the button state for diagnostics when the POST doesn't fire.
     await sleep(1200);
     for (let clickN = 1; clickN <= 3; clickN++) {
       const firedBefore = apiLog.filter((a) => /auths\/signup$/.test(a.url) && a.status === 200).length;
-      await clickFirst(page, ['button:has-text("Create Account")', 'button:has-text("Create")'], 'create account');
-      await sleep(8000);
-      const fired = apiLog.filter((a) => /auths\/signup$/.test(a.url) && a.status === 200).length;
+
+      // Method 1: click the button (check enabled first)
+      const btnInfo = await page.evaluate(() => {
+        const btns = [...document.querySelectorAll('button')].filter(b => b.offsetParent !== null);
+        return btns.map(b => ({
+          text: (b.textContent || '').trim().slice(0, 30),
+          disabled: b.disabled,
+          type: b.type,
+          id: b.id,
+        }));
+      }).catch(() => []);
+      log('signup', `button states: ${JSON.stringify(btnInfo.slice(0, 8))}`);
+      await clickFirst(page, ['button:has-text("Create Account")', 'button:has-text("Create")', 'button[type="submit"]:not([disabled])'], 'create account');
+      await sleep(5000);
+
+      // Method 2: if no POST yet, try Enter-key submit on the last input
+      let fired = apiLog.filter((a) => /auths\/signup$/.test(a.url) && a.status === 200).length;
+      if (fired <= firedBefore) {
+        log('signup', `click ${clickN} didn't fire POST — trying Enter-key submit`);
+        try { await page.keyboard.press('Enter'); } catch {}
+        await sleep(5000);
+        fired = apiLog.filter((a) => /auths\/signup$/.test(a.url) && a.status === 200).length;
+      }
+
+      // Method 3: if still no POST, try form.submit() via evaluate
+      if (fired <= firedBefore) {
+        log('signup', `Enter didn't fire POST — trying form.submit()`);
+        try {
+          await page.evaluate(() => {
+            const form = document.querySelector('form');
+            if (form) form.submit();
+          });
+        } catch {}
+        await sleep(5000);
+        fired = apiLog.filter((a) => /auths\/signup$/.test(a.url) && a.status === 200).length;
+      }
+
       log('signup', `click ${clickN}: signup-200 count ${firedBefore} -> ${fired}`);
       if (fired > firedBefore) break;
       // if the widget reset again (button disabled), re-solve
