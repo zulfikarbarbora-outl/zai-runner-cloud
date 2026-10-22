@@ -451,7 +451,7 @@ async function solveWidget(page) {
   if (!match || !match.best || !match.best.length) { log('solve', 'match failed'); return false; }
 
   let widthRefreshes = 0;
-  for (let tryN = 1; tryN <= 10; tryN++) {
+  for (let tryN = 1; tryN <= 20; tryN++) {
     const PW = match.PW || 0;
     const hole = pickHole(gap, PW);
     const bestScore = match.best[0].score;
@@ -459,7 +459,7 @@ async function solveWidget(page) {
     // width gate: narrow pieces (<40px) have tiny drop tolerance — refresh (max 2).
     // WAVE-2 NIT-1: skip this gate when detectGap found a hole — pickHole gives
     // the exact hole x0 even for narrow pieces (validated: conf1 PW=25 → hole=87).
-    if (PW > 0 && PW < 40 && !hole && widthRefreshes < 2 && tryN < 10) {
+    if (PW > 0 && PW < 40 && !hole && widthRefreshes < 2 && tryN < 20) {
       widthRefreshes += 1;
       log('match', `narrow piece (${PW}px) — refreshing for a wider one (${widthRefreshes}/2)`);
       const refreshed = await clickFirst(page, ['[id*="aliyunCaptcha-btn-refresh"]', '[aria-label*="refresh" i]'], 'refresh');
@@ -473,7 +473,7 @@ async function solveWidget(page) {
     // confidence gate: flat score curve = featureless region. Refresh ONLY
     // if detectGap ALSO found no hole — if detectGap has a hole, drag anyway
     // (template-match confidence is irrelevant when we have the hole).
-    if (!hole && match.confidence != null && match.confidence < 0.06 && tryN < 10) {
+    if (!hole && match.confidence != null && match.confidence < 0.06 && tryN < 20) {
       log('match', `low confidence (${(match.confidence * 100).toFixed(1)}%) + no detectGap hole — refreshing`);
       const refreshed = await clickFirst(page, ['[id*="aliyunCaptcha-btn-refresh"]', '[aria-label*="refresh" i]'], 'refresh');
       if (!refreshed) break;
@@ -486,7 +486,7 @@ async function solveWidget(page) {
     // absolute-score gate: both signals weak (no hole + poor template match)
     // → refresh. Catches the case where the bg has no clear dark hole AND
     // the piece doesn't template-match anywhere reliably.
-    if (!hole && bestScore > 30 && tryN < 10) {
+    if (!hole && bestScore > 30 && tryN < 20) {
       log('match', `both signals weak: best score ${bestScore.toFixed(1)}>30 + no detectGap hole — refreshing`);
       const refreshed = await clickFirst(page, ['[id*="aliyunCaptcha-btn-refresh"]', '[aria-label*="refresh" i]'], 'refresh');
       if (!refreshed) break;
