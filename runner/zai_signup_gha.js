@@ -190,7 +190,7 @@ function startWatchdog(stallMs = 180000, pollMs = 10000) {
 /* ---------------- main ---------------- */
 (async () => {
   log('start', `domain=${MAIL_DOMAIN} outdir=${OUTDIR} ip-check...`);
-  const wd = startWatchdog(180000, 10000);  // 3min stall → hard exit (caps silent death)
+  const wd = startWatchdog(600000, 30000);  // WAVE-18: 10min stall (was 3min) — R2 with 20 tries can take 200s+  // 3min stall → hard exit (caps silent death)
   try { const r = await fetch('https://api.ipify.org'); log('ip', await r.text()); } catch {}
 
   // S25 fleet: --email injects the runner identity (firstlast##@domain);
