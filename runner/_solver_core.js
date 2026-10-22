@@ -606,7 +606,7 @@ async function solveWidget(page) {
     log('captcha', `try ${tryN} not solved [${method}]: "${String(after.text).slice(0, 90)}"`);
     await page.screenshot({ path: `${OUTDIR}/fail_${tryN}.png` }).catch(() => {});
     const refreshed = await clickFirst(page, ['[id*="aliyunCaptcha-btn-refresh"]', '[aria-label*="refresh" i]', '[class*="refresh" i]'], 'refresh');
-    if (!refreshed || tryN === 10) break;
+    if (!refreshed || tryN === 20) break;
     await sleep(2600);
     const nst = await dumpPopup(page, `retry${tryN}`);
     if (!nst.img) break;
